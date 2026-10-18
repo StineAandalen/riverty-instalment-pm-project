@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>A Fair Way forward | Final Project</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Saans and Antarctican Mono are not hosted by Google Fonts. They are used when installed; Inter and JetBrains Mono load as the fallback. -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07162C;--fg:#ffffff;--muted:#ffffff;
+  --orange:#fb923c;--cyan:#22d3ee;--teal:#34d399;--blue:#60a5fa;--violet:#a78bfa;--pink:#f472b6;
+  --eyebrow:#fdba74;--line:rgba(251,146,60,.25);
+  --head:"Saans","Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --body:"Saans","Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"Antarctican Mono","JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-snap-type:y mandatory;scroll-behavior:smooth;background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 16px/1.55 var(--body);-webkit-font-smoothing:antialiased}
+.muted{color:var(--muted);opacity:.82}
+a{color:inherit}
+#bar{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--orange),var(--cyan));z-index:50}
+#dots{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:4px}
+.dot{position:relative;display:block;width:22px;height:22px}
+.dot::before{content:"";position:absolute;inset:6px;border-radius:50%;border:1.5px solid rgba(255,255,255,.65);transition:all .2s}
+.dot:hover::before{border-color:var(--orange)}
+.dot.on::before{background:var(--orange);border-color:var(--orange);inset:4px}
+.dot:focus-visible{outline:2px solid var(--cyan);outline-offset:2px;border-radius:50%}
+section.slide{min-height:100vh;scroll-snap-align:start;display:flex;align-items:center;position:relative;overflow:hidden}
+section.slide::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(900px 500px at 92% -10%,rgba(251,146,60,.13),transparent 60%),radial-gradient(700px 420px at -8% 108%,rgba(34,211,238,.09),transparent 60%)}
+.inner{position:relative;width:100%;max-width:1280px;margin:0 auto;padding:56px 64px 48px}
+.eyebrow{font:500 12px/1.3 var(--mono);text-transform:uppercase;letter-spacing:.12em;color:var(--eyebrow);margin:0 0 10px}
+h1,h2,h3{font-family:var(--head);margin:0;line-height:1.1}
+h1{font-weight:900;font-size:clamp(40px,6.4vw,92px);letter-spacing:-.02em}
+h2{font-weight:800;font-size:clamp(28px,3.3vw,46px);letter-spacing:-.01em;margin-bottom:22px}
+h3{font-weight:700;font-size:17px;margin-bottom:8px}
+p{margin:0 0 10px}
+.mono{font-family:var(--mono)}
+.lbl{font:500 11px/1.3 var(--mono);text-transform:uppercase;letter-spacing:.12em;color:var(--eyebrow);margin:0 0 6px;display:block}
+.card{border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.04);padding:20px}
+.hero{background:linear-gradient(135deg,rgba(251,146,60,.20),rgba(96,165,250,.10) 60%,rgba(34,211,238,.08));box-shadow:0 20px 44px rgba(0,0,0,.40)}
+.tile{box-shadow:0 14px 30px rgba(0,0,0,.35)}
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.g12{grid-template-columns:1.25fr 1fr}.g21{grid-template-columns:1fr 1.25fr}
+.pill{display:inline-block;font:500 12px/1 var(--mono);padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.05);margin:0 6px 6px 0}
+.pill.o{border-color:var(--orange);color:var(--orange)}.pill.c{border-color:var(--cyan);color:var(--cyan)}.pill.t{border-color:var(--teal);color:var(--teal)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{border:1px solid var(--line);border-radius:12px;padding:8px 12px;background:rgba(7,22,44,.55)}
+.chip b{display:block;font:800 24px/1.1 var(--head)}
+.chip span{font:400 11.5px/1.3 var(--mono);opacity:.82}
+.big{font:700 clamp(18px,1.9vw,26px)/1.35 var(--head)}
+.callout{border:1px solid var(--orange);border-radius:16px;padding:20px 22px;background:linear-gradient(135deg,rgba(251,146,60,.20),rgba(251,146,60,.06));box-shadow:0 16px 36px rgba(251,146,60,.14)}
+.callout.bad{border-color:var(--pink);background:linear-gradient(135deg,rgba(244,114,182,.18),rgba(244,114,182,.05));box-shadow:0 16px 36px rgba(244,114,182,.12)}
+.callout .lbl{color:var(--orange)}.callout.bad .lbl{color:var(--pink)}
+.btn{display:inline-flex;align-items:center;gap:10px;font:700 15px/1 var(--head);padding:14px 22px;border-radius:999px;background:var(--orange);color:#07162C;text-decoration:none;box-shadow:0 12px 28px rgba(251,146,60,.30)}
+.btn:hover{filter:brightness(1.06)}
+.btn.ph{background:transparent;color:var(--orange);border:1.5px dashed var(--orange);box-shadow:none}
+.linkph{display:inline-block;font:500 13px/1 var(--mono);padding:10px 14px;border-radius:12px;border:1.5px dashed rgba(255,255,255,.4);color:#fff;text-decoration:none;opacity:.85}
+.linkok{display:inline-block;font:500 13px/1 var(--mono);padding:10px 14px;border-radius:12px;border:1px solid var(--cyan);color:var(--cyan);text-decoration:none}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:10px 18px;align-items:center;margin-top:30px}
+.stepper{display:flex;align-items:center;gap:8px;margin-top:6px}
+.stepper i{width:14px;height:14px;border-radius:50%;background:var(--orange);display:block}
+.stepper i:nth-child(2){background:var(--cyan)}.stepper i:nth-child(3){background:var(--teal)}.stepper i:nth-child(4){background:var(--violet)}
+.stepper u{flex:1;height:0;border-top:2px dashed rgba(255,255,255,.35)}
+.map{display:grid;grid-template-columns:repeat(5,1fr);gap:26px;margin-top:6px}
+.step{position:relative;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.04);padding:16px 14px 14px}
+.step:not(:last-child)::after{content:"\2192";position:absolute;right:-21px;top:50%;transform:translateY(-50%);color:var(--eyebrow);font:500 18px var(--mono)}
+.step .where{font:500 11px/1 var(--mono);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:block}
+.step p{font-size:13.5px;line-height:1.45;margin:0 0 8px}
+.step .ev{font:400 11px/1.2 var(--mono);opacity:.8}
+.step.mom{border-color:var(--orange);background:linear-gradient(160deg,rgba(251,146,60,.22),rgba(251,146,60,.06));box-shadow:0 0 0 2px rgba(251,146,60,.30),0 16px 34px rgba(251,146,60,.18)}
+.step .badge{position:absolute;top:-12px;left:12px;background:var(--orange);color:#07162C;font:700 10.5px/1 var(--mono);text-transform:uppercase;letter-spacing:.08em;padding:5px 9px;border-radius:999px}
+.w-portal{color:var(--cyan)}.w-out{color:var(--violet)}.w-phone{color:var(--pink)}
+.lane h3{font-size:18px}
+.lane .when{font:400 12px/1.3 var(--mono);opacity:.8;margin-bottom:10px;display:block}
+.lane{border-top:5px solid var(--orange);padding-top:10px}
+.lane.next{border-top-color:var(--blue)}.lane.later{border-top-color:var(--violet)}
+.feat{border:1px solid var(--line);border-left:5px solid var(--violet);border-radius:12px;background:rgba(255,255,255,.04);padding:9px 12px;margin-bottom:8px;font-size:13.5px;line-height:1.35;font-weight:600}
+.feat small{display:block;font:400 10.5px/1.3 var(--mono);text-transform:uppercase;letter-spacing:.08em;margin-top:4px;opacity:.85}
+.feat.qw{border-left-color:var(--teal)}.feat.mpj{border-left-color:var(--blue)}.feat.fi{border-left-color:var(--violet)}.feat.ts{border-left-color:var(--pink)}
+.cutbar{margin-top:10px;border:1px dashed var(--pink);border-radius:12px;padding:10px 14px;font-size:13px}
+.cutbar b{color:var(--pink)}
+ul.clean{list-style:none;margin:0;padding:0}
+ul.clean li{position:relative;padding-left:22px;margin:0 0 9px;font-size:14px;line-height:1.45}
+ul.clean li::before{content:"";position:absolute;left:0;top:.5em;width:9px;height:9px;border-radius:50%;background:var(--orange)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14px}
+.kv dt{font:500 11px/1.8 var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--eyebrow)}
+.kv dd{margin:0}
+.rule{border-radius:14px;padding:14px 16px;border:1px solid;font-size:14px;line-height:1.45}
+.rule b{display:block;font:700 15px/1.2 var(--head);margin-bottom:6px}
+.rule.ship{border-color:var(--teal);background:rgba(52,211,153,.10)}.rule.ship b{color:var(--teal)}
+.rule.iter{border-color:var(--orange);background:rgba(251,146,60,.10)}.rule.iter b{color:var(--orange)}
+.rule.kill{border-color:var(--pink);background:rgba(244,114,182,.10)}.rule.kill b{color:var(--pink)}
+.metric{text-align:left}
+.metric .v{font:900 clamp(30px,3.2vw,46px)/1 var(--head)}
+.metric .t{font:400 12px/1.35 var(--mono);opacity:.85;margin-top:6px}
+.bar{height:8px;border-radius:99px;background:rgba(255,255,255,.14);margin-top:12px;position:relative;overflow:hidden}
+.bar i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,var(--orange),var(--cyan))}
+.ph-card{border:1.5px dashed rgba(255,255,255,.4);border-radius:16px;padding:20px;background:rgba(255,255,255,.03)}
+.ph-card p{opacity:.82}
+.sub{font-size:13px;opacity:.82}
+footer.note{font:400 11.5px/1.4 var(--mono);opacity:.7;margin-top:14px}
+.thanks h1{font-size:clamp(44px,7vw,100px)}
+.g3b{grid-template-columns:1.15fr 1.15fr .8fr}
+.btn.s{padding:10px 16px;font-size:13px}
+.pv{width:169px;height:264px;overflow:hidden;border-radius:14px;border:1px solid var(--line);background:#fff;position:relative;margin:2px auto 0}
+.pv iframe{position:absolute;top:0;left:0;width:375px;height:587px;border:0;transform:scale(.45);transform-origin:0 0;pointer-events:none}
+dialog#protoDlg{border:1px solid var(--line);border-radius:16px;padding:0;background:#07162C;color:#fff;width:min(430px,96vw);height:min(92vh,880px);box-shadow:0 30px 80px rgba(0,0,0,.6);overflow:hidden}
+dialog#protoDlg::backdrop{background:rgba(0,0,0,.65)}
+.dlg-in{display:flex;flex-direction:column;height:100%}
+.dlg-h{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}
+.dlg-h b{font:500 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow)}
+.dlg-h button{font:700 13px/1 var(--head);background:transparent;color:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer}
+#protoFrame{flex:1;border:0;background:#fff;width:100%}
+@media (max-width:980px){
+  .g3b{grid-template-columns:1fr}
+}
+@media (max-width:980px){
+  .inner{padding:44px 24px 40px}
+  .g2,.g3,.g4,.g12,.g21{grid-template-columns:1fr}
+  .map{grid-template-columns:1fr;gap:22px}
+  .step:not(:last-child)::after{content:"\2193";right:auto;left:50%;top:auto;bottom:-23px;transform:translateX(-50%)}
+  #dots{right:6px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.dot::before{transition:none}}
+</style>
+</head>
+<body>
+<div id="bar" aria-hidden="true"></div>
+<nav id="dots" aria-label="Slide navigation"></nav>
+
+<main>
+
+<!-- 1. COVER -->
+<section class="slide" id="s1" data-title="Cover">
+  <div class="inner">
+    <div class="grid g12" style="align-items:center;gap:40px">
+      <div>
+        <p class="eyebrow">Product School &middot; Product Management Certification &middot; Final Project</p>
+        <h1>A Fair Way forward</h1>
+        <p class="big" style="margin-top:22px;max-width:720px">More information on why we ask for the income to set up a consumer plan for the user</p>
+        <div class="meta">
+          <span class="lbl" style="margin:0">Name / cohort</span><span style="font-weight:700;font-size:18px">Stine B&aelig;kos Aandalen</span>
+          <span class="lbl" style="margin:0">Repo URL</span><span><a class="linkph" data-link="repo" href="#s8">Add repo URL before submitting</a></span>
+          <span class="lbl" style="margin:0">Prototype</span><span><a class="btn ph" data-link="proto" href="#s4">View prototype (link pending)</a></span>
+        </div>
+      </div>
+      <div class="card hero tile">
+        <span class="lbl">Riverty BU Collection &middot; case study</span>
+        <h3 style="font-size:22px;margin-bottom:14px">From a guessing game to a guided journey</h3>
+        <p class="sub" style="margin-bottom:16px">Future state for Mara, a shift worker with two open claims:</p>
+        <div class="stepper" aria-hidden="true"><i></i><u></u><i></i><u></u><i></i><u></u><i></i></div>
+        <div style="display:flex;justify-content:space-between;font:500 12px/1.3 var(--mono);margin-top:8px;text-transform:uppercase;letter-spacing:.08em">
+          <span>Orient</span><span>Explain</span><span>Choose</span><span>Commit</span>
+        </div>
+        <p class="sub" style="margin-top:18px">The case, its people, numbers and constraints are fictional.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. STRATEGY (Slide 5) -->
+<section class="slide" id="s2" data-title="Strategy">
+  <div class="inner">
+    <p class="eyebrow">Slide 5 &middot; Strategy</p>
+    <h2>Problem, value and hypothesis</h2>
+    <div class="grid g2" style="margin-bottom:18px">
+      <div class="card hero tile">
+        <span class="lbl">Problem hook</span>
+        <p class="big" style="margin:0">We must solve the rising cost by addressing the user's uncertainties &amp; possibly panic situation.</p>
+      </div>
+      <div class="card tile">
+        <span class="lbl">Value proposition</span>
+        <p style="margin:0;font-size:15.5px">We will offer a guided portal journey. We are losing most starters today right at the beginning of the user journey, to align our product priorities with our north-star strategic goal of 80% digital self-service Europe-wide.</p>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="lbl">Data-backed hypothesis</span>
+      <p class="big" style="margin:0 0 6px">The user enters a super transparent portal. She would easily understand the documents that are requested, and she can easily understand how she can set up a plan that combines several cases and is affordable for her.</p>
+      <p class="sub" style="margin:0;opacity:1">Measured by a 5% change in the uplift of the current SSR within 4 weeks, while protecting 60-day plan survival: no more than 19% of new agreements missing a payment within 60 days.</p>
+      <div class="chips">
+        <div class="chip"><b>31%</b><span>of starters contact an agent within 7 days</span></div>
+        <div class="chip"><b>28%</b><span>of uploaded income documents need review</span></div>
+        <div class="chip"><b>19%</b><span>of new agreements miss a payment within 60 days</span></div>
+      </div>
+    </div>
+    <div class="grid g3" style="margin-top:18px">
+      <div class="card"><span class="lbl">If we do nothing for 12 months</span><p class="sub" style="margin:0;opacity:1">The agent costs will increase and we will fall behind the goal of more self-service. The goal of the SSR is 80%.</p></div>
+      <div class="card"><span class="lbl">Risk level</span><p class="sub" style="margin:0;opacity:1">It's a high-stake risk because it touches cost (agent capacity) and strategic portfolio value (company plans that might fail).</p></div>
+      <div class="card"><span class="lbl">Scope of the problem</span><p class="sub" style="margin:0;opacity:1">This is a systemic problem.</p></div>
+    </div>
+    <footer class="note">Baselines come from the case-study evidence pack. All figures are fictional.</footer>
+  </div>
+</section>
+
+<!-- 3. RESEARCH (Slide 6) -->
+<section class="slide" id="s3" data-title="Research">
+  <div class="inner">
+    <p class="eyebrow">Slide 6 &middot; Research</p>
+    <h2>What Mara does instead of the portal</h2>
+    <div class="grid g3b" style="margin-bottom:26px">
+      <div class="card tile">
+        <span class="lbl">Competitive analysis / workaround</span>
+        <dl class="kv" style="margin:0 0 12px">
+          <dt>Role</dt><dd>The consumer, Mara</dd>
+          <dt>Goal</dt><dd>To agree to a plan she can afford and keep, covering both claims, without making her situation worse.</dd>
+          <dt>Tools</dt><dd>Phone call to an agent. <span class="muted">Hypothesis: her banking app or email (to hunt for proof of income) and her phone's camera or photo gallery (to upload it). Nothing in the brief confirms this.</span></dd>
+        </dl>
+        <p class="sub" style="margin:0">The brief names no competitors. The realistic alternatives to the portal are calling an agent, paying one claim by transfer and ignoring the other, borrowing, or doing nothing (hypotheses).</p>
+      </div>
+      <div class="card hero tile">
+        <span class="lbl">Moment of misery</span>
+        <p style="margin:0 0 12px;font-size:15.5px">After a reminder she opens the portal and can't tell whether a plan would be affordable, why her income is requested, or what happens if she misses a payment. If she's then asked for documents she can't easily find, she gives up or calls an agent.</p>
+        <div class="chips" style="margin-top:6px">
+          <div class="chip"><b>28%</b><span>of uploaded income documents need clarification or review</span></div>
+          <div class="chip"><b>31%</b><span>of journey starters contact an agent within 7 days</span></div>
+          <div class="chip"><b>54%</b><span>of starters don't reach an agreement</span></div>
+        </div>
+      </div>
+      <div class="card hero tile" style="display:flex;flex-direction:column;align-items:center;text-align:center">
+        <span class="lbl">Prototype</span>
+        <div class="pv" aria-hidden="true"><iframe id="pvFrame" title="Prototype preview" tabindex="-1"></iframe></div>
+        <a class="btn s" data-link="proto" href="#s3" style="margin-top:12px">View prototype</a>
+        <p class="sub" style="margin:8px 0 0;font-size:12px">Click through the three screens.</p>
+      </div>
+    </div>
+    <span class="lbl">Journey map today</span>
+    <div class="map" role="list">
+      <div class="step" role="listitem"><span class="where w-portal">In the portal</span><p>She opens the portal on her phone after a digital reminder and starts the instalment journey.</p><span class="ev">Documented</span></div>
+      <div class="step mom" role="listitem"><span class="badge">Moment of misery</span><span class="where w-portal">In the portal</span><p>She reaches the income questions and is asked for documents, without being told why.</p><span class="ev">Documented</span></div>
+      <div class="step" role="listitem"><span class="where w-out">Outside the portal</span><p>She searches her bank app or inbox for proof of variable income, and may upload a poor photo or estimate a figure.</p><span class="ev">Hypothesis</span></div>
+      <div class="step" role="listitem"><span class="where w-portal">Portal exit</span><p>She stops, unsure whether a wrong answer could make things worse, and closes the portal.</p><span class="ev">Documented</span></div>
+      <div class="step" role="listitem"><span class="where w-phone">Phone</span><p>She calls an agent, who repeats identity, affordability and case checks.</p><span class="ev">Documented</span></div>
+    </div>
+    <p class="sub" style="margin-top:16px"><b>Core frustration:</b> the point where she's asked for income documents she can't easily find, with no explanation, while worrying that a wrong figure could leave her worse off. Her uncertainty peaks there, and it's the moment she leaves the self-service path.</p>
+  </div>
+</section>
+
+<!-- 4. BLUEPRINT (Slide 7) -->
+<section class="slide" id="s4" data-title="Blueprint">
+  <div class="inner">
+    <p class="eyebrow">Slide 7 &middot; Blueprint</p>
+    <h2>Roadmap and PRD highlights</h2>
+    <div class="grid g3" style="margin-bottom:6px">
+      <div class="lane now"><h3>Now</h3><span class="when">3-week sprint</span>
+        <div class="feat fi">Journey instrumentation and guardrail dashboard<small>Fill-In</small></div>
+        <div class="feat qw">&ldquo;Why we ask&rdquo; explanations<small>Quick Win</small></div>
+        <div class="feat qw">Consequence preview<small>Quick Win</small></div>
+      </div>
+      <div class="lane next"><h3>Next</h3><span class="when">Following 1 to 2 sprints</span>
+        <div class="feat qw">Guided document upload<small>Quick Win</small></div>
+        <div class="feat mpj">Variable-income affordability helper (thin version)<small>Major Project</small></div>
+        <div class="feat fi">Explainable recommendation with escalation<small>Fill-In</small></div>
+        <div class="feat fi">Vulnerability support path (minimal)<small>Fill-In</small></div>
+      </div>
+      <div class="lane later"><h3>Later</h3><span class="when">Backlog</span>
+        <div class="feat qw">Safety net: reminders and reschedule<small>Quick Win</small></div>
+        <div class="feat mpj">Unified case view and joint plan<small>Major Project</small></div>
+      </div>
+    </div>
+    <div class="cutbar"><b>Cut list:</b> Agent handoff summary. It helps Daniel, but a case that reaches an agent has already missed the primary metric.</div>
+
+    <div class="grid g21" style="margin-top:22px;align-items:start">
+      <div class="card tile">
+        <span class="lbl">PRD highlights: &ldquo;Why we ask&rdquo; explanations</span>
+        <p class="sub" style="opacity:1">The cheapest direct answer to why her income is requested, mostly copy and design plus legal work.</p>
+        <ul class="clean">
+          <li><b>Full inventory, then coverage.</b> List every income, affordability and document-upload question in the German portal journey, and give each one a note.</li>
+          <li><b>A short note on each question</b> (about two sentences) saying why it's needed and how the answer is used.</li>
+          <li><b>A &ldquo;who can see it&rdquo; line</b> in each note, using wording confirmed by data protection.</li>
+          <li><b>Visible by default, inline, on mobile.</b> The note sits next to the question with no tap required.</li>
+          <li><b>Legal and data-protection sign-off</b> on the final wording before release.</li>
+        </ul>
+        <p class="sub" style="margin:8px 0 0"><b>Demoted from Must:</b> fixed, plain German copy, written by the team and reviewed, not generated at runtime. It is not a must-have and can be done by the content manager or AI.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <div class="callout">
+          <span class="lbl">What the PRD makes explicit</span>
+          <p style="margin:0;font-size:15px">The PRD treats legal-approved wording as a release gate, because a wrong statement about data use would damage the trust it is meant to build, and a vague brief would have left that risk to be discovered in week 3.</p>
+        </div>
+        <div class="card hero tile" style="text-align:center">
+          <span class="lbl">Clickable prototype</span>
+          <p class="sub" style="margin:0 0 14px">Three screens: start, About your income, confirmation.</p>
+          <a class="btn ph" data-link="proto" href="#s4">View prototype (link pending)</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. VALIDATION (Slide 8) -->
+<section class="slide" id="s5" data-title="Validation">
+  <div class="inner">
+    <p class="eyebrow">Slide 8 &middot; Validation</p>
+    <h2 style="margin-bottom:14px">Experiment plan</h2>
+    <div class="card hero tile" style="margin-bottom:14px">
+      <span class="lbl">Hypothesis</span>
+      <p style="margin:0 0 8px;font-size:14.5px">I believe that Why we ask for consumers will result in the user entering a super transparent portal. She would easily understand the documents that are requested, and she can easily understand how she can set up a plan that combines several cases and is affordable for her. The European rollout gets proof: a pilot with evidence, guardrails and a clear stop condition makes extending to other markets and portfolios a decision backed by data, not a leap. SSR becomes a trustworthy north star: reading it alongside the 60-day miss rate means a rising SSR reflects better outcomes.</p>
+      <p class="sub" style="margin:0;opacity:1"><b>Measured by</b> a 5% change in the uplift of the current SSR within 4 weeks. <b>We protect</b> 60-day plan survival throughout the test.</p>
+    </div>
+    <div class="grid g2" style="margin-bottom:12px">
+      <div class="card">
+        <span class="lbl">Control (A)</span>
+        <p style="margin:0;font-size:13.5px;line-height:1.45">31% of starters contact an agent within 7 days, roughly 2,600. The research themes say consumers don't know what's affordable, don't understand why income is requested, and fear the consequences of a wrong answer or missed payment. 28% of uploaded income documents need clarification or review.</p>
+      </div>
+      <div class="card" style="border-color:rgba(34,211,238,.45)">
+        <span class="lbl" style="color:var(--cyan)">Variant (B): exactly 3 screens</span>
+        <ul class="clean" style="margin:0">
+          <li style="font-size:13px;margin-bottom:5px"><b>Start instalment request:</b> &ldquo;Arrange an instalment plan&rdquo;, with the intro &ldquo;We ask a few short questions. Under each one, we explain why.&rdquo;</li>
+          <li style="font-size:13px;margin-bottom:5px"><b>About your income:</b> monthly net income, income pattern and proof of income (required, no skip option), each with a &ldquo;Why we ask&rdquo; note: why asked, how used, who can see it.</li>
+          <li style="font-size:13px;margin-bottom:0"><b>Confirmation:</b> &ldquo;Thanks, we have your income details&rdquo;, a recap with Edit links and the next step.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="sub" style="margin:0 0 12px"><b>Held constant (isolation check):</b> consumers still do not trust the &ldquo;Why we ask&rdquo; statements and give up and call an agent.</p>
+    <div class="grid g4" style="margin-bottom:12px">
+      <div class="card metric tile"><span class="lbl">Primary metric</span><div class="v" style="font-size:clamp(24px,2.4vw,34px)">SSR uplift</div><div class="t">The instalment is created in the portal with no agent contact 30 days before or after set-up, and the consumer keeps it with no missing payments within 60 days.</div></div>
+      <div class="card metric tile"><span class="lbl">Baseline</span><div class="v">31%</div><div class="t">Journey starters contacting an agent within 7 days</div></div>
+      <div class="card metric tile"><span class="lbl">MDE</span><div class="v">5%</div><div class="t">Sample 2,796 per arm. Split 50/50. Significance 0.05. Duration 4 weeks.</div></div>
+      <div class="card metric tile" style="border-color:var(--pink)"><span class="lbl" style="color:var(--pink)">Guardrail</span><div class="v">&ge; 81%</div><div class="t">60-day plan survival: no more than 19% of new agreements missing a payment within 60 days. No room below that baseline. Second guardrail: not set.</div></div>
+    </div>
+    <span class="lbl">Shipping criteria</span>
+    <div class="grid g3">
+      <div class="rule ship"><b>Ship</b>SSR uplift improves by &ge; 5% at 0.05 and 60-day plan survival does not fall below 81% after 4 weeks.</div>
+      <div class="rule iter"><b>Iterate</b>The direction is positive but the lift is below the MDE.</div>
+      <div class="rule kill"><b>Kill</b>The primary metric shows no improvement or moves negatively.</div>
+    </div>
+    <p class="sub" style="margin-top:12px">The read date is fixed at the end of 4 weeks. No results are reviewed before this date. <b>Findings and decision:</b> to be added after the experiment runs.</p>
+  </div>
+</section>
+
+<!-- 6. LAUNCH (Slide 9) -->
+<section class="slide" id="s6" data-title="Launch">
+  <div class="inner">
+    <p class="eyebrow">Slide 9 &middot; Launch</p>
+    <h2>Go-to-market and success metrics</h2>
+    <div class="grid g12" style="align-items:start">
+      <div>
+        <div class="grid g3" style="margin-bottom:14px">
+          <div class="card"><span class="lbl">Goal</span><p class="sub" style="margin:0;opacity:1"><b>Engagement.</b> We want to encourage users to add the information we ask for.</p></div>
+          <div class="card"><span class="lbl">Launch tier</span><p class="sub" style="margin:0;opacity:1"><b>S, Minimal.</b> We are only adjusting content in an already existing feature.</p></div>
+          <div class="card"><span class="lbl">Feature</span><p class="sub" style="margin:0;opacity:1"><b>Why we ask:</b> more transparent information to justify why we ask for the income details.</p></div>
+        </div>
+        <div class="card" style="margin-bottom:14px">
+          <span class="lbl">Audience</span>
+          <p class="sub" style="margin:0 0 12px;opacity:1">Mara, 38, a shift worker with variable but stable income and two open claims. She can't pay the balance in one go and opens the portal on her phone, after a digital reminder, with very little time. She represents the pilot segment in Germany: consumers who need an instalment plan across single or multiple claims.</p>
+          <span class="lbl">Channels (owned)</span>
+          <span class="pill o">Own consumer portal</span><span class="pill c">Email link to the portal</span><span class="pill t">Letter</span>
+        </div>
+        <div class="card" style="margin-bottom:14px">
+          <span class="lbl">Enablement and assets</span>
+          <p class="sub" style="margin:0;opacity:1">A short demo of how to set up an instalment that matches your income, or add info in any of the existing FAQ.</p>
+        </div>
+        <div class="card">
+          <span class="lbl">Ownership and budget</span>
+          <p class="sub" style="margin:0 0 8px;opacity:1">The product manager of this PRD, one person. Build in the portal: one engineering lead, one person. A one-pager for the call: one person in collections who briefs Daniel. The case study names no individuals.</p>
+          <p class="sub" style="margin:0;opacity:1">No media spend. The extra cost is the briefing and the measurement of the call within 7 days and the keep rate at 60 days. <b>Do not build:</b> paid campaigns, influencers, a model, an image check, reminders, or a launch outside the Germany pilot.</p>
+        </div>
+      </div>
+      <div>
+        <span class="lbl">Timeline</span>
+        <div class="grid" style="gap:10px;margin-bottom:16px">
+          <div class="rule ship" style="border-color:var(--cyan);background:rgba(34,211,238,.08)"><b style="color:var(--cyan)">Phase 1, beta</b>50/50 in the one segment, 14 days of enrollment plus 7 days of follow-up. Do not ship on day 21.</div>
+          <div class="rule iter"><b>Phase 2, launch</b>Only once, 60 days after agreement, the keep rate in the variant is at least 81% and the call rate has fallen by at least 5 percentage points below 31%. Then in the portal only, for this segment.</div>
+          <div class="rule ship"><b>Phase 3, after launch</b>Keep reading the keep rate, with the one-pager in use. No further market while the 81% holds.</div>
+        </div>
+        <span class="lbl">Success metrics (targets, not results)</span>
+        <div class="grid g2" style="gap:12px;margin-bottom:14px">
+          <div class="card metric tile"><div class="v">31%</div><div class="t">Call rate within 7 days today. Target: at least 5 percentage points lower.</div><div class="bar"><i style="width:84%"></i></div></div>
+          <div class="card metric tile"><div class="v">&ge; 81%</div><div class="t">Keep rate at 60 days (19% or fewer missing a payment).</div><div class="bar"><i style="width:81%"></i></div></div>
+        </div>
+        <div class="callout bad" style="margin-bottom:12px">
+          <span class="lbl">Bad signal to watch for</span>
+          <p style="margin:0;font-size:14px">Many people see the instalment, and the call rate stays at 31%. Or calls fall and the 60-day miss rate rises. Then she agreed without being able to keep the instalment.</p>
+        </div>
+        <div class="card">
+          <span class="lbl">Likely post-launch decision</span>
+          <p class="sub" style="margin:0;opacity:1"><b>Repeat</b> if the call rate falls by less than 5 percentage points, or it falls and the keep rate is below 81%. <b>Double</b> only if both are true: at least 5 percentage points fewer calls and a keep rate of at least 81%. <b>Lower the priority</b> if the call rate does not fall or it rises.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. STORY (Slide 10) -->
+<section class="slide" id="s7" data-title="Story">
+  <div class="inner">
+    <p class="eyebrow">Slide 10 &middot; Story</p>
+    <h2>Friction, aha moment and takeaways</h2>
+    <div class="grid g2" style="align-items:stretch">
+      <div class="card hero tile">
+        <span class="lbl">Friction point and aha moment</span>
+        <p class="big" style="margin:0">The AI cut the unified case view, even though the brief says Mara has two open claims. I caught it by checking the roadmap against her persona, and I restored it.</p>
+      </div>
+      <div class="callout" style="display:flex;flex-direction:column;justify-content:center">
+        <span class="lbl">Key takeaways / what I would do next</span>
+        <p class="big" style="margin:0;font-size:clamp(24px,2.6vw,38px)">Test one change at a time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. THANK YOU / SUBMIT -->
+<section class="slide thanks" id="s8" data-title="Thank you">
+  <div class="inner" style="text-align:center">
+    <p class="eyebrow">Final Project &middot; Product Management Certification</p>
+    <h1>Thank you</h1>
+    <p class="big" style="margin:18px auto 30px;max-width:720px">A Fair Way forward</p>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:16px">
+      <a class="linkph" data-link="repo" href="#s8">Add repo URL before submitting</a>
+      <span class="pill c" style="margin:0">Cohort: Stine B&aelig;kos Aandalen</span>
+      <span class="callout" style="display:inline-block;border-radius:999px;padding:14px 26px;font:700 16px/1.2 var(--head)">Submit to the learning platform</span>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<dialog id="protoDlg" aria-label="Prototype: Why we ask">
+  <div class="dlg-in">
+    <div class="dlg-h"><b>Prototype: Why we ask</b><button type="button" id="protoClose">Close</button></div>
+    <iframe id="protoFrame" title="Interactive prototype"></iframe>
+  </div>
+</dialog>
+<script type="text/plain" id="proto-css">:root{--charcoal:#282828;--c70:#686868;--c25:#C9C9C9;--green:#527A42;--green70:#86A27B;--error:#DA1E28;--band:#E8E5E1;--note:#F4F2EF;
+--font-body:"GT Ultra","Avenir Next","Segoe UI",system-ui,-apple-system,sans-serif;--font-head:"GT Ultra Median",Georgia,"Times New Roman",serif}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--charcoal);font:300 14px/20px var(--font-body);letter-spacing:.14px}
+.phone{width:100%;background:#fff;position:relative}
+.hdr{position:relative;z-index:2;height:60px;background:#fff;box-shadow:0 10px 8px rgba(40,40,40,.25);display:flex;align-items:center;justify-content:space-between;padding:0 22px}
+.hdr .r{display:flex;align-items:center;gap:33px}
+.lang{display:flex;align-items:center;gap:10px;font:300 20px/22px var(--font-body);color:var(--charcoal);background:none;border:0;padding:0;letter-spacing:0}
+.ico{background:none;border:0;padding:0;display:block;line-height:0}
+.band{position:relative;z-index:1;background:var(--band);height:120px;padding-top:20px;text-align:center}
+.band .bl{font-size:12px;line-height:13px;letter-spacing:0}
+.band .bv{font-size:25px;line-height:30px;letter-spacing:1px;font-weight:400;margin-top:6px}
+.notch{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:72px;height:20px;display:block}
+.stepper{padding:30px 30px 20px}
+.step-labels{display:flex;justify-content:space-between;font-size:12px;line-height:16px;letter-spacing:.36px;font-weight:400}
+.step-row{display:flex;align-items:center;margin-top:6px}
+.dot{border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;flex:none}
+.dot.done{width:20px;height:20px;background:var(--green70)}
+.dot.cur{width:34px;height:34px;background:var(--green);font-size:24px;font-weight:400}
+.dot.next{width:20px;height:20px;background:var(--green70);font-size:14px;font-weight:400}
+.line{flex:1;height:0;border-top:1.5px solid var(--charcoal)}
+.line.dash{border-top:1.5px dashed var(--c25)}
+.content{padding:10px 22px 60px}
+h1{margin:0;font:300 26px/normal var(--font-head);color:var(--green);letter-spacing:0}
+h1:focus{outline:none}
+.body{margin:20px 0 0}
+.body p{margin:0 0 20px}
+.field{margin:30px 0 0;padding:0;border:0;min-width:0}
+.flabel{display:block;font-size:12px;line-height:16px;color:var(--c70);padding:0 0 0 10px;letter-spacing:0}
+.note{background:var(--note);border-left:3px solid var(--green);padding:10px 12px;margin:6px 0 10px}
+.note-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.note-head .t{color:var(--green);font-size:14px;font-weight:400}
+.tag{font-size:12px;line-height:16px;color:var(--c70);border:1px solid var(--c25);padding:0 6px;background:#fff}
+.note p{margin:6px 0 0;font-size:14px;line-height:20px}
+.inputrow{display:flex;align-items:flex-start;border-bottom:1px solid var(--charcoal)}
+.inputrow .cur{padding-left:10px;font-size:15px;line-height:30px;color:var(--c70);letter-spacing:0}
+.inputrow input{flex:1;min-width:0;border:0;background:transparent;font:300 15px/25px var(--font-body);height:30px;padding:0 0 0 6px;color:var(--charcoal);letter-spacing:0}
+.inputrow input:focus{outline:none}
+.inputrow:focus-within{outline:2px solid var(--charcoal);outline-offset:2px}
+.err{font-size:12px;line-height:16px;color:var(--error);padding:3px 0 0 10px;margin:0;letter-spacing:0}
+.radios{border-top:1px solid var(--c25)}
+.radio{display:flex;align-items:center;gap:12px;padding:10px;min-height:44px;cursor:pointer;font-size:15px;letter-spacing:0;border-bottom:1px solid var(--c25)}
+.radio input{appearance:none;-webkit-appearance:none;width:20px;height:20px;border:1px solid var(--charcoal);border-radius:50%;margin:0;flex:none;display:grid;place-content:center;background:#fff}
+.radio input::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--green);transform:scale(0)}
+.radio input:checked::before{transform:scale(1)}
+.radio:focus-within{outline:2px solid var(--charcoal);outline-offset:-2px}
+.hint{margin:0 0 6px;font-size:14px}
+.vh{position:absolute;opacity:0;width:1px;height:1px;overflow:hidden}
+.upl{display:inline-flex;align-items:center;gap:10px;color:var(--green);font-size:15px;line-height:20px;letter-spacing:.3px;cursor:pointer;padding:6px 0}
+.upl:hover{text-decoration:underline}
+.vh:focus-visible+.upl{outline:2px solid var(--charcoal);outline-offset:2px}
+.chip{display:flex;align-items:center;gap:6px;font-size:12px;line-height:16px;color:var(--c70);margin-top:6px;letter-spacing:0;word-break:break-all}
+.chip button{background:none;border:0;padding:6px;cursor:pointer;line-height:0}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:41px;padding:13.5px 10px;background:var(--charcoal);color:#fff;border:0;font:700 12px/normal var(--font-body);letter-spacing:.24px;text-transform:uppercase;cursor:pointer;text-align:center}
+.btn:hover{background:#000}
+.btn:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.btn.out{background:transparent;color:#fff;border:2px solid #fff;min-height:40px;padding:0 10px}
+.tert{display:block;margin:30px auto 0;background:none;border:0;border-bottom:1px solid var(--charcoal);padding:0 0 4px;font:300 14px/normal var(--font-body);text-transform:uppercase;letter-spacing:.07px;color:var(--charcoal);cursor:pointer}
+.tert.s{margin:0;font-size:12px;flex:none}
+.req{margin:20px 0 0;text-align:center;font-size:12px;line-height:16px;color:var(--c70);letter-spacing:0}
+.recap{margin:30px 0 0;border-top:1px solid var(--c25)}
+.rrow{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;padding:10px 0;border-bottom:1px solid var(--c25)}
+.rl{font-size:12px;line-height:16px;color:var(--c70);letter-spacing:0}
+.rv{font-size:15px;line-height:22px;letter-spacing:0;word-break:break-word}
+.ended{background:var(--note);border-left:3px solid var(--green);padding:10px 12px;margin-top:20px;font-size:14px}
+.foot{background:var(--charcoal);color:#fff;padding:25px 22px 20px}
+.foot p{margin:40px 10px 0;text-align:center}
+.foot a{color:#fff;text-decoration:underline}
+.foot .copy{margin:60px 0 0;text-align:center}
+</script>
+<script type="text/plain" id="proto-js">(function () {
+  var COPY = {
+    income_amount: "We process this information to assess which instalment arrangements are suitable for you. Access is limited to staff responsible for handling your case.",
+    income_pattern: "We ask this to understand how your income varies from month to month when we propose an instalment arrangement. Access is limited to staff responsible for handling your case.",
+    income_proof: "Proof of income is required to verify your stated income, so that any arrangement rests on accurate information. Access is limited to staff responsible for handling your case."
+  };
+  var PATTERNS = [["same", "Stays the same"], ["varies", "Changes (for example shift work)"], ["none", "No income right now"]];
+  var st = { screen: window.START || 1, amount: "", pattern: "", doc: null, errors: {}, ended: false };
+  var app = document.getElementById("app");
+
+  var LOGO = '<svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><rect width="32" height="6" fill="#527A42"/><rect width="6" height="32" fill="#527A42"/></svg>';
+  var CHEV = '<svg width="9" height="6" viewBox="0 0 9 6" aria-hidden="true" focusable="false"><path d="M1 1l3.5 3.5L8 1" fill="none" stroke="#282828" stroke-width="1.5"/></svg>';
+  var SEARCH = '<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6" fill="none" stroke="#282828" stroke-width="2"/><path d="M12.5 12.5L19 19" stroke="#282828" stroke-width="2" fill="none"/></svg>';
+  var MENU = '<svg width="27" height="18" viewBox="0 0 27 18" aria-hidden="true" focusable="false"><rect width="27" height="3" fill="#282828"/><rect y="7.5" width="27" height="3" fill="#282828"/><rect y="15" width="27" height="3" fill="#282828"/></svg>';
+  var CHECK = '<svg width="12" height="10" viewBox="0 0 12 10" aria-hidden="true" focusable="false"><path d="M1 5l3.5 3.5L11 1.5" fill="none" stroke="#fff" stroke-width="2"/></svg>';
+  var UP = '<svg width="21" height="19" viewBox="0 0 21 19" aria-hidden="true" focusable="false"><path d="M10.5 15V2M4.5 8l6-6 6 6" fill="none" stroke="#527A42" stroke-width="1.3"/><path d="M1 18h19" stroke="#527A42" stroke-width="1.3" fill="none"/></svg>';
+  var INFO = '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="7.2" fill="none" stroke="#282828" stroke-width="1"/><path d="M8 7v5" stroke="#282828" stroke-width="1.2" fill="none"/><circle cx="8" cy="4.6" r="0.8" fill="#282828"/></svg>';
+  var CLOSE = '<svg width="8" height="8" viewBox="0 0 8 8" aria-hidden="true" focusable="false"><path d="M1 1l6 6M7 1L1 7" stroke="#686868" stroke-width="1.2" fill="none"/></svg>';
+  var NOTCH = '<svg class="notch" viewBox="0 0 72 20" aria-hidden="true" focusable="false"><path d="M0 20C14 20 18 0 36 0S58 20 72 20Z" fill="#fff"/><path d="M32 11l4-4 4 4" fill="none" stroke="#282828" stroke-width="1.5"/></svg>';
+
+  function esc(t) {
+    return String(t).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function header() {
+    return '<header class="hdr">' + LOGO + '<div class="r"><button type="button" class="lang" aria-label="Language: DE">' + CHEV + 'DE</button><button type="button" class="ico" aria-label="Search">' + SEARCH + '</button><button type="button" class="ico" aria-label="Menu">' + MENU + '</button></div></header>';
+  }
+  function band() {
+    return '<div class="band"><div class="bl">Case reference</div><div class="bv">DEMO-0001</div>' + NOTCH + '</div>';
+  }
+  function stepper() {
+    return '<nav class="stepper" aria-label="Progress: step 2 of 3, Arrange"><div class="step-labels"><span style="text-decoration:underline">Payment type</span><span>Arrange</span><span style="color:#686868">Debt-free</span></div><div class="step-row"><span class="dot done">' + CHECK + '</span><span class="line"></span><span class="dot cur" aria-current="step">2</span><span class="line dash"></span><span class="dot next">3</span></div></nav>';
+  }
+  function footer() {
+    return '<footer class="foot"><button type="button" class="btn out" data-act="noop">Open personal area</button><p>If you have questions, see our <a href="#" data-act="noop">FAQ</a> or send us a message via the <a href="#" data-act="noop">contact form</a>.</p><p class="copy">\u00A9 Riverty Back in Flow 2023</p></footer>';
+  }
+  function note(id) {
+    return '<div class="note" id="note-' + id + '"><div class="note-head">' + INFO + '<span class="t">Why we ask</span><span class="tag">Draft wording</span></div><p>' + esc(COPY[id]) + '</p></div>';
+  }
+  function errHtml(key) {
+    return st.errors[key] ? '<p class="err" id="err-' + key + '" role="alert">' + esc(st.errors[key]) + '</p>' : "";
+  }
+
+  function s1() {
+    return '<main class="content"><h1 id="heading" tabindex="-1">Arrange an instalment plan</h1><div class="body"><p>You received a payment reminder.</p><p>We ask a few short questions. Under each one, we explain why.</p></div><div style="margin-top:20px"><button class="btn" type="button" data-act="start">Continue</button></div></main>';
+  }
+  function s2() {
+    var e = st.errors;
+    var h = '<main class="content"><h1 id="heading" tabindex="-1">About your income</h1><div class="body"><p>Under each question, you can see why we ask.</p></div>';
+    h += '<div class="field" style="margin-top:10px"><label class="flabel" for="amount">Monthly net income*</label>' + note("income_amount") +
+      '<div class="inputrow"><span class="cur" aria-hidden="true">\u20AC</span><input id="amount" type="text" inputmode="decimal" autocomplete="off" value="' + esc(st.amount) +
+      '" aria-describedby="note-income_amount' + (e.amount ? " err-amount" : "") + '" aria-invalid="' + (e.amount ? "true" : "false") + '"></div>' + errHtml("amount") + "</div>";
+    h += '<fieldset class="field" aria-describedby="note-income_pattern' + (e.pattern ? " err-pattern" : "") + '"><legend class="flabel" style="padding:0 0 0 10px">Does your income change from month to month?*</legend>' + note("income_pattern") + '<div class="radios">';
+    PATTERNS.forEach(function (p) {
+      h += '<label class="radio"><input type="radio" name="pattern" value="' + p[0] + '" id="pattern-' + p[0] + '"' + (st.pattern === p[0] ? " checked" : "") + "><span>" + esc(p[1]) + "</span></label>";
+    });
+    h += "</div>" + errHtml("pattern") + "</fieldset>";
+    if (st.pattern !== "none") {
+      h += '<div class="field"><div class="flabel" id="proof-label">Proof of your income (required)*</div>' + note("income_proof") +
+        '<p class="hint" id="proof-hint">Add your latest proof of income.</p>' +
+        '<div role="group" aria-labelledby="proof-label" aria-describedby="note-income_proof proof-hint' + (e.doc ? " err-doc" : "") + '" style="position:relative">' +
+        '<input id="file" class="vh" type="file" accept=".pdf,.jpg,.jpeg,.png"><label for="file" class="upl">' + UP + "Upload document</label></div>" +
+        (st.doc ? '<div class="chip"><span>' + esc(st.doc) + '</span><button type="button" aria-label="Remove document" data-act="rmdoc">' + CLOSE + "</button></div>" : "") +
+        errHtml("doc") + "</div>";
+    }
+    h += '<div style="margin-top:40px"><button class="btn" type="button" data-act="next2">Continue</button><button class="tert" type="button" data-act="back1">Back</button><p class="req">* Required fields</p></div></main>';
+    return h;
+  }
+  function s3() {
+    var none = st.pattern === "none";
+    var pl = (PATTERNS.filter(function (p) { return p[0] === st.pattern; })[0] || ["", ""])[1];
+    var amt = st.amount.trim() ? "\u20AC " + st.amount.trim() : (none ? "Not provided (no income right now)" : "Not provided");
+    function row(l, v) {
+      return '<div class="rrow"><div><div class="rl">' + l + '</div><div class="rv">' + esc(v) + '</div></div><button class="tert s" type="button" data-act="edit" aria-label="Edit ' + l + '">Edit</button></div>';
+    }
+    return '<main class="content"><h1 id="heading" tabindex="-1">' + (none ? "Thanks, we have your details" : "Thanks, we have your income details") + '</h1><div class="recap">' +
+      row("Monthly net income", amt) + row("Income pattern", pl) + (none ? "" : row("Proof of income", st.doc ? "Uploaded: " + st.doc : "Still needed")) +
+      '</div><div class="body"><p style="margin-top:20px">Next, you\'ll see your instalment options.</p></div><button class="btn" type="button" data-act="end">Continue to instalment options</button>' +
+      (st.ended ? '<p class="ended" role="status">Prototype ends here. In the pilot, this step leads to the instalment options.</p>' : "") + "</main>";
+  }
+
+  function render(focus) {
+    var y = window.scrollY;
+    app.innerHTML = header() + band() + stepper() + (st.screen === 1 ? s1() : st.screen === 2 ? s2() : s3()) + footer();
+    window.scrollTo(0, y);
+    if (focus === "heading") {
+      window.scrollTo(0, 0);
+      var h = document.getElementById("heading"); if (h) h.focus();
+    } else if (focus) {
+      var el = document.getElementById(focus); if (el) el.focus();
+    }
+  }
+  function go(n) { st.screen = n; render("heading"); }
+
+  function validate() {
+    var e = {}, amt = st.amount.trim(), none = st.pattern === "none";
+    if (!amt) { if (!none) e.amount = "Enter your monthly net income in euros."; }
+    else if (!/^\d+([.,]\d{1,2})?$/.test(amt)) e.amount = "Enter your monthly net income in euros.";
+    if (!st.pattern) e.pattern = "Choose the option that fits best.";
+    if (!none && !st.doc) e.doc = "Proof of income is required to continue. Choose a document to add.";
+    return e;
+  }
+  function next2() {
+    st.errors = validate();
+    var keys = Object.keys(st.errors);
+    if (!keys.length) { go(3); return; }
+    render(keys[0] === "amount" ? "amount" : keys[0] === "pattern" ? "pattern-same" : "file");
+  }
+  function clearErr(k) {
+    delete st.errors[k];
+    var el = document.getElementById("err-" + k); if (el) el.parentNode.removeChild(el);
+  }
+
+  app.addEventListener("click", function (e) {
+    var t = e.target.closest("[data-act]"); if (!t) return;
+    var a = t.getAttribute("data-act");
+    if (a === "noop") { e.preventDefault(); }
+    else if (a === "start") { go(2); }
+    else if (a === "back1") { st.errors = {}; go(1); }
+    else if (a === "next2") { next2(); }
+    else if (a === "edit") { st.ended = false; go(2); }
+    else if (a === "end") { st.ended = true; render(); }
+    else if (a === "rmdoc") { st.doc = null; render("file"); }
+  });
+  app.addEventListener("input", function (e) {
+    if (e.target.id === "amount") { st.amount = e.target.value; clearErr("amount"); }
+  });
+  app.addEventListener("change", function (e) {
+    var t = e.target;
+    if (t.name === "pattern") {
+      st.pattern = t.value; delete st.errors.pattern;
+      if (t.value === "none") { st.doc = null; delete st.errors.doc; }
+      render("pattern-" + t.value);
+    } else if (t.id === "file") {
+      var f = t.files && t.files[0];
+      if (f) { st.doc = f.name; delete st.errors.doc; render("file"); }
+    }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && window.parent !== window) { window.parent.postMessage("close-proto", "*"); }
+  });
+  render();
+})();
+</script>
+<script>
+(function () {
+  // Paste your links here. Empty values show a placeholder.
+  var REPO_URL = "https://github.com/StineAandalen/riverty-instalment-pm-project";
+  var PROTO_URL = "";
+
+  document.querySelectorAll('[data-link="repo"]').forEach(function (a) {
+    if (REPO_URL) { a.href = REPO_URL; a.target = "_blank"; a.rel = "noopener"; a.className = "linkok"; a.textContent = REPO_URL; }
+  });
+  var protoCss = document.getElementById("proto-css").textContent;
+  var protoJs = document.getElementById("proto-js").textContent;
+  function protoDoc(start) {
+    return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Prototype</title><style>' +
+      protoCss + '</style></head><body><div id="app"></div><scr' + 'ipt>window.START=' + start + ';' + protoJs + '</scr' + 'ipt></body></html>';
+  }
+  var dlg = document.getElementById("protoDlg");
+  var frame = document.getElementById("protoFrame");
+  function openProto() {
+    frame.srcdoc = protoDoc(1);
+    if (dlg.showModal) { dlg.showModal(); } else { dlg.setAttribute("open", ""); }
+  }
+  document.getElementById("protoClose").addEventListener("click", function () { dlg.close(); });
+  dlg.addEventListener("close", function () { frame.srcdoc = ""; });
+  window.addEventListener("message", function (e) {
+    if (e.source === frame.contentWindow && e.data === "close-proto" && dlg.open) { dlg.close(); }
+  });
+  dlg.addEventListener("click", function (e) { if (e.target === dlg) { dlg.close(); } });
+  var pv = document.getElementById("pvFrame");
+  if (pv) { pv.srcdoc = protoDoc(2); }
+  document.querySelectorAll('[data-link="proto"]').forEach(function (a) {
+    var small = a.classList.contains("s");
+    a.className = "btn" + (small ? " s" : "");
+    a.textContent = "View prototype";
+    if (PROTO_URL) { a.href = PROTO_URL; a.target = "_blank"; a.rel = "noopener"; }
+    else { a.addEventListener("click", function (e) { e.preventDefault(); openProto(); }); }
+  });
+
+  var slides = Array.prototype.slice.call(document.querySelectorAll("section.slide"));
+  var dotsEl = document.getElementById("dots");
+  var bar = document.getElementById("bar");
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var cur = 0;
+
+  slides.forEach(function (s, i) {
+    var a = document.createElement("a");
+    a.href = "#" + s.id; a.className = "dot";
+    a.setAttribute("aria-label", "Go to slide " + (i + 1) + ": " + s.getAttribute("data-title"));
+    a.title = s.getAttribute("data-title");
+    a.addEventListener("click", function (e) { e.preventDefault(); go(i); });
+    dotsEl.appendChild(a);
+  });
+  var dots = Array.prototype.slice.call(dotsEl.children);
+
+  function go(i) {
+    i = Math.max(0, Math.min(slides.length - 1, i));
+    slides[i].scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+  }
+  function update() {
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + "%";
+    var y = window.scrollY + window.innerHeight / 2, idx = 0;
+    for (var i = 0; i < slides.length; i++) {
+      if (slides[i].offsetTop <= y) idx = i;
+    }
+    cur = idx;
+    dots.forEach(function (d, k) { d.classList.toggle("on", k === idx); });
+  }
+  function fit() {
+    slides.forEach(function (s) {
+      var inn = s.querySelector(".inner");
+      inn.style.zoom = "";
+      if (window.innerWidth <= 980) return;
+      var need = inn.offsetHeight, avail = window.innerHeight;
+      if (need > avail) { inn.style.zoom = (avail / need).toFixed(3); }
+    });
+    update();
+  }
+  window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", fit);
+  window.addEventListener("load", fit);
+  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(fit); }
+  fit();
+
+  document.addEventListener("keydown", function (e) {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (document.querySelector("dialog[open]")) return;
+    var k = e.key;
+    if (k === "ArrowDown" || k === "PageDown" || (k === " " && !e.shiftKey)) { e.preventDefault(); go(cur + 1); }
+    else if (k === "ArrowUp" || k === "PageUp" || (k === " " && e.shiftKey)) { e.preventDefault(); go(cur - 1); }
+    else if (k === "Home") { e.preventDefault(); go(0); }
+    else if (k === "End") { e.preventDefault(); go(slides.length - 1); }
+    else if (k === "Escape") { e.preventDefault(); go(0); }
+  });
+})();
+</script>
+</body>
+</html>
